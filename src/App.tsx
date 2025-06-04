@@ -58,7 +58,9 @@ function sendText(){
       console.warn("Socket not ready yet");
     }
 
-    setMessage(text);
+    //setMessage(text);
+      textRef.current.value = ""; // ✅ Clear the textarea after sending
+
 
   }
 
@@ -87,6 +89,11 @@ useEffect(()=>{
         setMessages(prev => [...prev, s])
       
       }
+
+      if (data.type === "history") {
+            const msgs = data.payload;// receive a array of messages 
+            setMessages(msgs); // Replace the existing message list
+}
     } catch (error) {
       console.error("Failed to parse WebSocket message:", error);
     }
