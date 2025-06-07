@@ -4,11 +4,8 @@ import {useRef} from 'react'
 import { useNavigate } from "react-router-dom"
 
 
+
 function Landing() {
-
-
-
-
 
 const roomRef = useRef<HTMLInputElement>(null);
 const navigate= useNavigate();
@@ -53,5 +50,6 @@ function handleroom (){
     </div>
   )
 }
+
 
 export default Landing

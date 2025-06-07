@@ -103,7 +103,7 @@ function Content() {
             </div>
 
         </CardHeader>
-
+ 
         <CardContent className="space-y-4">
           {room && (
             <div className="text-sm text-zinc-400">
@@ -119,7 +119,7 @@ function Content() {
             <div className="flex flex-col gap-2 pr-2">
               {messages.map((msg, idx) => (
                 <div
-                  key={idx}
+                  key={idx} 
                   className="bg-zinc-700 text-white px-4 py-2 rounded-lg text-sm border border-zinc-600"
                 >
                   {msg}
