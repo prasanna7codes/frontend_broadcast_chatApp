@@ -19,7 +19,9 @@ function Content() {
 
   
   useEffect(() => {
-const ws = new WebSocket("wss://chat-app-backend-v0l3.onrender.com");
+const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway.app");//adding the railway one
+ 
+
 
     ws.onopen = () => {
       console.log("WebSocket opened");
