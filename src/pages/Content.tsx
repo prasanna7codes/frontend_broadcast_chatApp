@@ -19,7 +19,7 @@ function Content() {
 
   
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
+const ws = new WebSocket("wss://chat-app-backend-v0l3.onrender.com");
 
     ws.onopen = () => {
       console.log("WebSocket opened");
