@@ -16,11 +16,16 @@ function Content() {
   const location = useLocation();
   const navigate = useNavigate()
   const room = location.state?.roomId; // roomId from landing page
+  const pass = location.state?.password;// paswword from landing page
+
 
   
   useEffect(() => {
-const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway.app");//adding the railway one
- 
+const ws = new WebSocket(
+  import.meta.env.MODE === "development"
+    ? "ws://localhost:8080"
+    : "wss://broadcastingchatappbackend-production.up.railway.app"
+); // using loclhost for checking and railway for deployment 
 
 
     ws.onopen = () => {
@@ -55,7 +60,7 @@ const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway
       socket.send(
         JSON.stringify({
           type: "join",
-          payload: { roomId: room },
+          payload: { roomId: room , password: pass },
         })
       );
     }
