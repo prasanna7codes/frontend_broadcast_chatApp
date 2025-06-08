@@ -65,13 +65,15 @@ const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway
   const sendText = () => {
     
     if (textRef.current && socket && socket.readyState === WebSocket.OPEN) {
-      const text = textRef.current.value;
+      const text = textRef.current.value.trim();
+      if (text!==""){
       socket.send(
         JSON.stringify({
           type: "message",
           payload: { message: text },
         })
       );
+    }
       textRef.current.value = "";
     }
   };
