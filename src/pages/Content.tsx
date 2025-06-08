@@ -14,19 +14,16 @@ function Content() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const location = useLocation();
-  const navigate = useNavigate()
-  const room = location.state?.roomId; // roomId from landing page
-  const pass = location.state?.password;// paswword from landing page
+  const navigate = useNavigate();
+  const room = location.state?.roomId;
+  const pass = location.state?.password;
 
-
-  
   useEffect(() => {
-const ws = new WebSocket(
-  import.meta.env.MODE === "development"
-    ? "ws://localhost:8080"
-    : "wss://broadcastingchatappbackend-production.up.railway.app"
-); // using loclhost for checking and railway for deployment 
-
+    const ws = new WebSocket(
+      import.meta.env.MODE === "development"
+        ? "ws://localhost:8080"
+        : "wss://broadcastingchatappbackend-production.up.railway.app"
+    );
 
     ws.onopen = () => {
       console.log("WebSocket opened");
@@ -42,6 +39,9 @@ const ws = new WebSocket(
           setMessages(prev => [...prev, data.payload.message]);
         } else if (data.type === "history") {
           setMessages(data.payload);
+        } else if (data.type === "error") {
+          alert(data.payload.message);
+          navigate("/");
         }
       } catch (err) {
         console.error("Parsing error:", err);
@@ -53,37 +53,33 @@ const ws = new WebSocket(
     };
   }, []);
 
-  // took help from chat gpt as my handlesubmit was not written in according to handle the current interface i am providing , myhandle sybmit was useful if it was one page application
   useEffect(() => {
     if (socket && socket.readyState === WebSocket.OPEN && room) {
       console.log("🔗 Sending join with room:", room);
       socket.send(
         JSON.stringify({
           type: "join",
-          payload: { roomId: room , password: pass },
+          payload: { roomId: room, password: pass },
         })
       );
     }
   }, [socket, room]);
 
-
   const sendText = () => {
-    
     if (textRef.current && socket && socket.readyState === WebSocket.OPEN) {
       const text = textRef.current.value.trim();
-      if (text!==""){
-      socket.send(
-        JSON.stringify({
-          type: "message",
-          payload: { message: text },
-        })
-      );
-    }
+      if (text !== "") {
+        socket.send(
+          JSON.stringify({
+            type: "message",
+            payload: { message: text },
+          })
+        );
+      }
       textRef.current.value = "";
     }
   };
 
-  // automatically scroll to the bottom of the messages 
   useEffect(() => {
     if (scrollAreaRef.current) {
       const viewport = scrollAreaRef.current.querySelector(
@@ -98,21 +94,18 @@ const ws = new WebSocket(
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-6">
       <Card className="w-full max-w-md bg-zinc-900 border border-zinc-800">
-      
-    
         <CardHeader>
-            <div className="flex justify-between">
+          <div className="flex justify-between">
             <CardTitle className="text-yellow-400 text-xl">You’re In!</CardTitle>
-            <Button className="bg-yellow-400 text-black hover:bg-yellow-300 " onClick={
-                () => navigate('/')
-                }>Change room
-                
-                </Button>       
-
-            </div>
-
+            <Button
+              className="bg-yellow-400 text-black hover:bg-yellow-300"
+              onClick={() => navigate("/")}
+            >
+              Change room
+            </Button>
+          </div>
         </CardHeader>
- 
+
         <CardContent className="space-y-4">
           {room && (
             <div className="text-sm text-zinc-400">
@@ -128,7 +121,7 @@ const ws = new WebSocket(
             <div className="flex flex-col gap-2 pr-2">
               {messages.map((msg, idx) => (
                 <div
-                  key={idx} 
+                  key={idx}
                   className="bg-zinc-700 text-white px-4 py-2 rounded-lg text-sm border border-zinc-600"
                 >
                   {msg}
@@ -139,13 +132,12 @@ const ws = new WebSocket(
 
           <div className="space-y-2">
             <Textarea
-            onKeyDown={(e) => {// code to send message on enter 
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Prevent newline
-      sendText();
-    }
-  }}
-
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendText();
+                }
+              }}
               ref={textRef}
               className="w-full resize-none bg-zinc-800 border-zinc-700 text-white"
               placeholder="Type a message..."
