@@ -14,12 +14,12 @@ function Content() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const room = location.state?.roomId;
   const pass = location.state?.password;
 
   useEffect(() => {
-    const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway.app");
+    const ws = new WebSocket("wss://backend-quikkk.onrender.com");
 
     ws.onopen = () => {
       console.log("WebSocket opened");
