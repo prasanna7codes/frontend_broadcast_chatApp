@@ -19,11 +19,7 @@ function Content() {
   const pass = location.state?.password;
 
   useEffect(() => {
-    const ws = new WebSocket(
-      import.meta.env.MODE === "development"
-        ? "ws://localhost:8080"
-        : "wss://broadcastingchatappbackend-production.up.railway.app"
-    );
+    const ws = new WebSocket("wss://broadcastingchatappbackend-production.up.railway.app");
 
     ws.onopen = () => {
       console.log("WebSocket opened");
